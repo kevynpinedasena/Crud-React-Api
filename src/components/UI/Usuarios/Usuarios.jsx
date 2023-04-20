@@ -51,7 +51,7 @@ export const Usuarios = ( {usuario = []} ) => {
                             <th scope="row">{item.apellido}</th>
                             <th scope="row">{item.telefono}</th>
                             <th scope="row">{item.correo}</th>
-                            <th><ModalActualizar documento={item.documento}/></th>
+                            <th><ModalActualizar documento={item.documento} nombre={item.nombre} apellido={item.apellido} telefono={item.telefono} correo={item.correo}/></th>
                             <th><button id={item.documento} className="btnEliminar" onClick={ () => eliminarUsuario(item.documento)}><img className="imgEliminar" src={Eliminar} alt="eliminar" /></button></th>
                          </tr>   
                         ))
