@@ -1,26 +1,27 @@
 import React, { useState } from "react";
-import Actualizar from "../../../Images/lapiz.png";
 import Eliminar from "../../../Images/eliminar.png";
 import { ModalActualizar } from "../ModalActualizar/ModalActualizar";
+import Swal from "sweetalert2";
 
 export const Usuarios = ( {usuario = []} ) => {
 
     const eliminarUsuario = (documento) => {
         console.log(documento);
-        let URL = 'http://localhost:8080/api/usuarios/'+documento
+        let URL = 'http://localhost:8080/api/usuarios/'+documento;
 
         fetch(URL, {
             method: "DELETE",
         })
         .then( (respuesta) => {
             if (respuesta.status === 200) {
-                alert("Usuario Eliminado con Exito")
+                Swal.fire("Eliminado Exitosamente", "Usuario Eliminado Correctamente", "success");
+                window.location.reload("http://localhost:3000/")
             }
             else if (respuesta.status === 404) {
-                alert("El Usuario con el documento " + documento + " No existe")
+                Swal.fire("Error", "Usuario " + documento + " no Existe", "error");
             }
             else{
-                alert("Error")
+                Swal.fire("Error", "", "error");
             }
         })
     }

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Actualizar from "../../../Images/lapiz.png";
 import { Input } from "../Input/Input";
+import Swal from "sweetalert2";
 
 
 export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo} ) => {
@@ -20,38 +21,61 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
         setModal(false);
     };
 
-    const infoInputDoc = (evento) => {
-        setValorDoc(evento.target.value)
-    }
-
-    const infoInputNom = (evento) => {
-        setValorNom(evento.target.value)
-    }
-
-    const infoInputApe = (evento) => {
-        setValorApe(evento.target.value)
-    }
-
-    const infoInputTel = (evento) => {
-        setValorTel(evento.target.value)
-    }
-
-    const infoInputCorreo = (evento) => {
-        setValorCorreo(evento.target.value)
-    }
 
     const limpiar = () => {
-        setValorDoc("");
-        setValorNom("");
-        setValorApe("");
-        setValorTel("");
-        setValorCorreo("");
+        informacion();
         cerrarModal();
       }
 
     const actualizar = () => {
         console.log(valorDoc, valorNom, valorApe, valorTel, valorCorreo);
+        let URL = 'http://localhost:8080/api/usuarios/'+documento;
+
+        if (valorNom === "") {
+            Swal.fire("Alerta", "Porfavor Ingrese el Nombre", "warning")
+        }
+        else if (valorApe === "") {
+            Swal.fire("Alerta", "Porfavor Ingrese el Apellido", "warning")
+        }
+        else if (valorTel == "") {
+            Swal.fire("Alerta", "Porfavor Ingrese el Telefono", "warning")
+        }
+        else if (valorCorreo === "") {
+            Swal.fire("Alerta", "Porfavor Ingrese el correo", "warning")
+        }
+        else{
+            fetch(URL,{
+                method: "PUT",
+                headers: {"content-type":"application/json"},
+                body:JSON.stringify({
+                    nombre: valorNom,
+                    apellido: valorApe,
+                    telefono: valorTel,
+                    correo: valorCorreo
+                })
+            })
+            .then( (respuesta) => {
+                if (respuesta.status === 201) {
+                    Swal.fire("Actualizado Exitosamente", "Usuario Actualizado con exito", "success");
+                    limpiar();
+                }
+                else{
+                    Swal.fire("Error","","error")
+                }
+            })
+        }
     }
+
+    const informacion = () =>{
+        setValorNom(nombre);
+        setValorApe(apellido);
+        setValorTel(telefono);
+        setValorCorreo(correo);
+    }
+
+    useEffect(() => {
+        informacion();
+    },[])
 
     return(
         <>
@@ -60,16 +84,35 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
             <div className="modal-overlay">
                 <div className="modal2">
                     <div className="modal-header">
-                        <h2>{"Actualizar Usuario " + nombre}</h2>
+                        <h2>{"Actualizar Usuario " + documento}</h2>
                         <button className="cerrarModal" onClick={cerrarModal}>X</button>
                     </div>
                     <div className="modal-body">
                         <div className='formulario'>
-                            <Input id={"documento"} tipo={"number"} valor={valorDoc} estilo={"input"} evento={infoInputDoc} habilitado={"true"}/>
-                            <Input id={"nombre"} tipo={"text"} valor={valorNom} estilo={"input"} evento={infoInputNom}/>
-                            <Input id={"apellido"} tipo={"text"} valor={valorApe} estilo={"input"} evento={infoInputApe}/>
-                            <Input id={"telefono"} tipo={"text"} valor={valorTel} estilo={"input"} evento={infoInputTel}/>
-                            <Input id={"correo"} tipo={"text"} valor={valorCorreo} estilo={"input"} evento={infoInputCorreo}/>
+
+                            <div className="contenedorLabel">
+                                <label htmlFor="nombre" className="label">Nombre: </label>
+                                <Input id={"nombre"} tipo={"text"} valor={valorNom} estilo={"inputModalAct"} 
+                                    evento={ (e) => setValorNom(e.target.value)}/>
+                            </div>
+
+                            <div className="contenedorLabel">
+                                <label htmlFor="apellido" className="label">Apellido: </label>
+                                <Input id={"apellido"} tipo={"text"} valor={valorApe} estilo={"inputModalAct"} 
+                                    evento={(e) => setValorApe(e.target.value)}/>
+                            </div>
+
+                            <div className="contenedorLabel">
+                                <label htmlFor="telefono" className="label">Telefono: </label>
+                                <Input id={"telefono"} tipo={"text"} valor={valorTel} estilo={"inputModalAct"} 
+                                    evento={(e) => setValorTel(e.target.value)}/>
+                            </div>
+
+                            <div className="contenedorLabel">
+                                <label htmlFor="correo" className="label">Correo: </label>
+                                <Input id={"correo"} tipo={"text"} valor={valorCorreo} estilo={"inputModalAct"} 
+                                    evento={(e) => setValorCorreo(e.target.value)}/>
+                            </div>
 
                             <div className="contBtn">
                                 <button id='btnGuardar' className='btn btn-success' onClick={actualizar}>Actualizar</button>

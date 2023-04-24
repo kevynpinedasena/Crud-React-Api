@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input } from '../../UI/Input/Input';
+import Swal from 'sweetalert2'
 
 
 export const Modal = ( {titulo} ) => {
@@ -13,27 +14,6 @@ export const Modal = ( {titulo} ) => {
     const [valorInputApell, setValorInputApell] = useState("");
     const [valorInputTelef, setValorInputTelef] = useState("");
     const [valorInputCorreo, setValorInputCorreo] = useState("");
-
-
-    const informacionInput1 = (evento) => {
-        setValorInputDoc(evento.target.value)
-      }
-    
-    const informacionInput2 = (evento) => {
-       setValorInputNom(evento.target.value)
-    }
-    
-     const informacionInput3 = (evento) => {
-       setValorInputApell(evento.target.value)
-    }
-    
-    const informacionInput4 = (evento) => {
-       setValorInputTelef(evento.target.value)
-    }
-    
-    const informacionInput5 = (evento) => {
-       setValorInputCorreo(evento.target.value)
-    }
 
     const abrirModal = () => {
         setModal(true);
@@ -52,15 +32,31 @@ export const Modal = ( {titulo} ) => {
       cerrarModal();
     }
 
+    const cargarPgina = () => {
+      window.location.reload("http://localhost:3000/");
+    }
+
     const guardarUsuario = () => {
         let documento = valorInputDoc;
         let nombre = valorInputNom;
         let apellido = valorInputApell;
         let telefono = valorInputTelef;
         let correo = valorInputCorreo;
-  
-        if (documento === 0 || nombre === "" || apellido === "" || telefono === "" || correo === "") {
-          alert("LLene todos los campos")
+        
+        if (documento === 0 && documento === "") {
+          Swal.fire("Alerta","Porfavor Ingrese el Documento", "info")
+        }
+        else if (nombre === "") {
+          Swal.fire("Alerta","Porfavor Ingrese el Nombre", "info")
+        }
+        else if (apellido === "") {
+          Swal.fire("Alerta","Porfavor Ingrese el Apellido", "info")
+        }
+        else if (telefono === "") {
+          Swal.fire("Alerta","Porfavor Ingrese el Telefono", "info")
+        }
+        else if (correo === "") {
+          Swal.fire("Alerta","Porfavor Ingrese el Correo", "info")
         }
         else{
           fetch(URL, {
@@ -76,13 +72,14 @@ export const Modal = ( {titulo} ) => {
           })
           .then( (respuesta) => {
             if (respuesta.status === 201) {
-                alert("Registrado con exito");
+                Swal.fire("Registro Exitoso", "Usuario Guardado Exitosamente", "success");
                 cerrarModal();
                 limpiar();
+                cargarPgina();
             }
             else{
                 if (respuesta.status === 400) {
-                    alert("Por Favor Verifique que el documento no este repetido \n Verifique que el Correo tenga un formato valido y el telefono ")
+                    Swal.fire("Error","Por Favor Verifique que el documento no este repetido \n Verifique que el Correo tenga un formato valido y el telefono", "error")
                 }
             }
           })
@@ -101,11 +98,20 @@ export const Modal = ( {titulo} ) => {
                     </div>
                     <div className="modal-body">
                         <div className='formulario'>
-                            <Input id={"documento"} tipo={"number"} valor={valorInputDoc} estilo={"input"} placeholder={"Documento"} evento={informacionInput1}/>
-                            <Input id={"nombre"} tipo={"text"} valor={valorInputNom} estilo={"input"} placeholder={"Nombre"} evento={informacionInput2}/>
-                            <Input id={"apellido"} tipo={"text"} valor={valorInputApell} estilo={"input"} placeholder={"Apellido"} evento={informacionInput3}/>
-                            <Input id={"telefono"} tipo={"text"} valor={valorInputTelef} estilo={"input"} placeholder={"Telefono"} evento={informacionInput4}/>
-                            <Input id={"correo"} tipo={"text"} valor={valorInputCorreo} estilo={"input"} placeholder={"Correo"} evento={informacionInput5}/>
+                            <Input id={"documento"} tipo={"number"} valor={valorInputDoc} estilo={"input"} placeholder={"Documento"} 
+                              evento={(e) => setValorInputDoc(e.target.value)}/>
+
+                            <Input id={"nombre"} tipo={"text"} valor={valorInputNom} estilo={"input"} placeholder={"Nombre"} 
+                              evento={(e) => setValorInputNom(e.target.value)}/>
+
+                            <Input id={"apellido"} tipo={"text"} valor={valorInputApell} estilo={"input"} placeholder={"Apellido"} 
+                              evento={(e) => setValorInputApell(e.target.value)}/>
+
+                            <Input id={"telefono"} tipo={"text"} valor={valorInputTelef} estilo={"input"} placeholder={"Telefono"} 
+                              evento={(e) => setValorInputTelef(e.target.value)}/>
+
+                            <Input id={"correo"} tipo={"text"} valor={valorInputCorreo} estilo={"input"} placeholder={"Correo"} 
+                              evento={(e) => setValorInputCorreo(e.target.value)}/>
                             
                             <div className="contBtn">
                                 <button id='btnGuardar' className='btn btn-success' onClick={guardarUsuario}>Guardar</button>
