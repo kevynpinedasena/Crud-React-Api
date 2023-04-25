@@ -25,7 +25,13 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
     const limpiar = () => {
         informacion();
         cerrarModal();
-      }
+    }
+
+    const cargar = () => {
+        setTimeout( () => {
+            window.location.reload("http://localhost:3000/")
+        },1000)
+    }
 
     const actualizar = () => {
         console.log(valorDoc, valorNom, valorApe, valorTel, valorCorreo);
@@ -58,11 +64,16 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
                 if (respuesta.status === 201) {
                     Swal.fire("Actualizado Exitosamente", "Usuario Actualizado con exito", "success");
                     limpiar();
+                    cargar();
+                }
+                else if (respuesta.status === 400) {
+                    Swal.fire("Alerta", "Por Favor revise el Telefono y correo que tenga un formato correcto", "info");
                 }
                 else{
                     Swal.fire("Error","","error")
                 }
             })
+            .catch(error => console.log(error))
         }
     }
 

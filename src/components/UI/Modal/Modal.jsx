@@ -32,9 +32,11 @@ export const Modal = ( {titulo} ) => {
       cerrarModal();
     }
 
-    const cargarPgina = () => {
-      window.location.reload("http://localhost:3000/");
-    }
+    const cargar = () => {
+      setTimeout( () => {
+          window.location.reload("http://localhost:3000/")
+      },1000)
+  }
 
     const guardarUsuario = () => {
         let documento = valorInputDoc;
@@ -75,7 +77,7 @@ export const Modal = ( {titulo} ) => {
                 Swal.fire("Registro Exitoso", "Usuario Guardado Exitosamente", "success");
                 cerrarModal();
                 limpiar();
-                cargarPgina();
+                cargar();
             }
             else{
                 if (respuesta.status === 400) {
@@ -83,6 +85,7 @@ export const Modal = ( {titulo} ) => {
                 }
             }
           })
+          .catch(error => console.log(error))
         }
       };
 

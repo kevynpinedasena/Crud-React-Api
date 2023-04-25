@@ -5,6 +5,12 @@ import Swal from "sweetalert2";
 
 export const Usuarios = ( {usuario = []} ) => {
 
+    const cargar = () => {
+        setTimeout( () => {
+            window.location.reload("http://localhost:3000/")
+        },1000)
+    }
+
     const eliminarUsuario = (documento) => {
         console.log(documento);
         let URL = 'http://localhost:8080/api/usuarios/'+documento;
@@ -15,7 +21,7 @@ export const Usuarios = ( {usuario = []} ) => {
         .then( (respuesta) => {
             if (respuesta.status === 200) {
                 Swal.fire("Eliminado Exitosamente", "Usuario Eliminado Correctamente", "success");
-                window.location.reload("http://localhost:3000/")
+                cargar();
             }
             else if (respuesta.status === 404) {
                 Swal.fire("Error", "Usuario " + documento + " no Existe", "error");
@@ -24,6 +30,7 @@ export const Usuarios = ( {usuario = []} ) => {
                 Swal.fire("Error", "", "error");
             }
         })
+        .catch(error => console.log(error))
     }
     
 
