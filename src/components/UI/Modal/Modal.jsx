@@ -35,7 +35,7 @@ export const Modal = ( {titulo} ) => {
     const cargar = () => {
       setTimeout( () => {
           window.location.reload("http://localhost:3000/")
-      },1000)
+      })
   }
 
     const guardarUsuario = () => {
@@ -74,10 +74,14 @@ export const Modal = ( {titulo} ) => {
           })
           .then( (respuesta) => {
             if (respuesta.status === 201) {
-                Swal.fire("Registro Exitoso", "Usuario Guardado Exitosamente", "success");
+                Swal.fire("Registro Exitoso", "Usuario Guardado Exitosamente", "success")
+                .then( (ok) => {
+                  if (ok) {
+                    cargar();
+                  }
+                });
                 cerrarModal();
                 limpiar();
-                cargar();
             }
             else{
                 if (respuesta.status === 400) {

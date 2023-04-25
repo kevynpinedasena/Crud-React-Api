@@ -8,7 +8,7 @@ export const Usuarios = ( {usuario = []} ) => {
     const cargar = () => {
         setTimeout( () => {
             window.location.reload("http://localhost:3000/")
-        },1000)
+        })
     }
 
     const eliminarUsuario = (documento) => {
@@ -20,8 +20,12 @@ export const Usuarios = ( {usuario = []} ) => {
         })
         .then( (respuesta) => {
             if (respuesta.status === 200) {
-                Swal.fire("Eliminado Exitosamente", "Usuario Eliminado Correctamente", "success");
-                cargar();
+                Swal.fire("Eliminado Exitosamente", "Usuario Eliminado Correctamente", "success")
+                .then( (ok) => {
+                    if (ok) {
+                        cargar();
+                    }
+                })
             }
             else if (respuesta.status === 404) {
                 Swal.fire("Error", "Usuario " + documento + " no Existe", "error");

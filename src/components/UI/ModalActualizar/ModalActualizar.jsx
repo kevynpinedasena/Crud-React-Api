@@ -30,7 +30,7 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
     const cargar = () => {
         setTimeout( () => {
             window.location.reload("http://localhost:3000/")
-        },1000)
+        })
     }
 
     const actualizar = () => {
@@ -62,9 +62,13 @@ export const ModalActualizar = ( {documento, nombre, apellido, telefono, correo}
             })
             .then( (respuesta) => {
                 if (respuesta.status === 201) {
-                    Swal.fire("Actualizado Exitosamente", "Usuario Actualizado con exito", "success");
+                    Swal.fire("Actualizado Exitosamente", "Usuario Actualizado con exito", "success")
+                    .then( (ok) => {
+                        if (ok) {
+                            cargar();
+                        }
+                    });
                     limpiar();
-                    cargar();
                 }
                 else if (respuesta.status === 400) {
                     Swal.fire("Alerta", "Por Favor revise el Telefono y correo que tenga un formato correcto", "info");
